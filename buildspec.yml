@@ -6,19 +6,25 @@ phases:
       - echo "Installing Trivy..."
       - wget https://github.com/aquasecurity/trivy/releases/download/v0.43.0/trivy_0.43.0_Linux-64bit.deb
       - dpkg -i trivy_0.43.0_Linux-64bit.deb
+
   pre_build:
     commands:
+      - echo "Logging into Docker Hub..."
+      - docker login -u $mcher1 -p $ZipTum84$
       - echo "Setting image tag..."
       - IMAGE_TAG=my-secure-ci-cd:latest
+
   build:
     commands:
       - echo "Building Docker image..."
       - docker build -t $IMAGE_TAG app/
       - echo "Scanning Docker image with Trivy..."
       - trivy image --severity HIGH,CRITICAL $IMAGE_TAG
+
   post_build:
     commands:
       - echo "Build completed successfully."
+
 artifacts:
   files:
     - '**/*'
