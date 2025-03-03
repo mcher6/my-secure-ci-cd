@@ -1,7 +1,14 @@
+# Use a lightweight Python base image
 FROM python:3.9-slim
 
+# Set the working directory inside the container
 WORKDIR /app
+
+# Copy your application code into the container
 COPY main.py .
 
+# Expose the port your app listens on (e.g., 8000)
 EXPOSE 8000
+
+# Run your Python app
 CMD ["python", "main.py"]
