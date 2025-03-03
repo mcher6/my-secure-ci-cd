@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Logging into Docker Hub..."
       # Use --password-stdin to avoid interactive prompt
-      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_PASSWORD --password-stdin
+      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - IMAGE_TAG=my-secure-ci-cd:latest
 
   build:
