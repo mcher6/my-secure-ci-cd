@@ -10,8 +10,8 @@ phases:
   pre_build:
     commands:
       - echo "Logging into Docker Hub..."
-      - docker login -u $mcher1 -p $ZipTum84$
-      - echo "Setting image tag..."
+      # Use --password-stdin to avoid interactive prompt
+      - echo $DOCKERHUB_PASSWORD | docker login -u $mcher1 --password-stdin
       - IMAGE_TAG=my-secure-ci-cd:latest
 
   build:
@@ -19,7 +19,7 @@ phases:
       - echo "Building Docker image..."
       - docker build -t $IMAGE_TAG app/
       - echo "Scanning Docker image with Trivy..."
-      - trivy image --severity HIGH,CRITICAL $IMAGE_TAG
+      - trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE_TAG
 
   post_build:
     commands:
