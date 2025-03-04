@@ -9,9 +9,7 @@ phases:
 
   pre_build:
     commands:
-      - echo "Logging into Docker Hub..."
-      # Use --password-stdin to avoid interactive prompt
-      - echo -n $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - echo "Setting image tag..."
       - IMAGE_TAG=my-secure-ci-cd:latest
 
   build:
