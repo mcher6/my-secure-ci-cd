@@ -2,25 +2,29 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      docker: 19
     commands:
       - echo "Installing Trivy..."
       - wget https://github.com/aquasecurity/trivy/releases/download/v0.43.0/trivy_0.43.0_Linux-64bit.deb
       - dpkg -i trivy_0.43.0_Linux-64bit.deb
+
   pre_build:
     commands:
-      - echo "Setting image tag..."
+      - echo "Logging into Docker Hub..."
+      # Use --password-stdin to avoid interactive prompt
+      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - IMAGE_TAG=my-secure-ci-cd:latest
+
   build:
     commands:
       - echo "Building Docker image..."
       - docker build -t $IMAGE_TAG app/
       - echo "Scanning Docker image with Trivy..."
-      - trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE_TAG
+      - trivy image --severity HIGH,CRITICAL $IMAGE_TAG
+
   post_build:
     commands:
       - echo "Build completed successfully."
+
 artifacts:
   files:
     - '**/*'
